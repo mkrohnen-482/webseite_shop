@@ -65,7 +65,7 @@ Ablauf: Kunde füllt aus → Server prüft Pflichtfelder, Länge, Auswahl, Preis
 ## Etappen
 
 - [x] 0 · Gerüst steht (Astro, Design-Tokens, Startseite, Produktseite mit Formular, Checkout-API)
-- [ ] 1 · Setup – GitHub + Vercel verbunden, Seite online → `docs/01-setup.md`
+- [x] 1 · Setup – GitHub + Vercel verbunden, Seite online → `docs/01-setup.md`
 - [ ] 2 · Material ablegen – Amazon-Export, Logo, Fotos in `_ablage/`
 - [ ] 3 · Produkte – Import aus Amazon-Export, Optionen je Produkt prüfen → `docs/03-produkte.md`
 - [ ] 4 · Design – Logo, Farben final, Fotos → `docs/02-design.md`
@@ -86,3 +86,4 @@ Ablauf: Kunde füllt aus → Server prüft Pflichtfelder, Länge, Auswahl, Preis
 | Datum | Was |
 |---|---|
 | 2026-10-03 | Gerüst erstellt, Wechsel GitHub Pages → Vercel, Personalisierung auf 8 Optionen erweitert |
+| 2026-10-03 | Live auf webseite-shop.vercel.app, Passwortschutz bis Launch über SHOP_PASSWORD (Launch = Variable löschen + Redeploy) |

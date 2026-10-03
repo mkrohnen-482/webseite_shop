@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PersonalizeForm from '../../components/PersonalizeForm.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 export async function getStaticPaths() {
   const products = await getCollection('products', p => p.data.active);
   return products.map(p => ({ params: { slug: p.id }, props: { p } }));
 }
-const { p } = Astro.props;
+// Statisch: Produkt kommt aus getStaticPaths. Vorschau-Modus (Server): per Slug laden.
+const p = Astro.props.p ?? await getEntry('products', Astro.params.slug!);
+if (!p || !p.data.active) return new Response('Produkt nicht gefunden.', { status: 404 });
 const { Content } = await render(p);
 const d = p.data;
 const eur = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(d.price);
