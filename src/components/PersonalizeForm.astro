@@ -1,0 +1,74 @@
+---
+interface Option { id: string; label: string; type: string; required: boolean; maxLength?: number; choices?: string[]; hint?: string }
+interface Props { slug: string; options: Option[] }
+const { slug, options } = Astro.props;
+---
+<form class="perso" data-slug={slug} novalidate>
+  <fieldset>
+    <legend>Deine Personalisierung</legend>
+    {options.map(o => (
+      <div class="field">
+        <label for={`f-${o.id}`}>{o.label}{!o.required && <span class="opt"> (optional)</span>}</label>
+        {o.type === 'select' ? (
+          <select id={`f-${o.id}`} name={o.id} required={o.required}>
+            <option value="">Bitte wählen</option>
+            {o.choices?.map(c => <option>{c}</option>)}
+          </select>
+        ) : o.type === 'textarea' ? (
+          <textarea id={`f-${o.id}`} name={o.id} maxlength={o.maxLength} required={o.required} rows="3"></textarea>
+        ) : (
+          <input id={`f-${o.id}`} name={o.id} type={o.type === 'date' ? 'date' : 'text'} maxlength={o.maxLength} required={o.required} />
+        )}
+        {(o.hint || o.maxLength) && <small>{o.hint ?? `Max. ${o.maxLength} Zeichen`}</small>}
+      </div>
+    ))}
+  </fieldset>
+  <label class="confirm">
+    <input type="checkbox" name="confirm" required />
+    Ich habe die Schreibweise geprüft. Personalisierte Ware ist vom Widerruf ausgeschlossen.
+  </label>
+  <button class="btn" type="submit">Weiter zur Kasse</button>
+  <p class="error" role="alert" hidden></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.perso').forEach(form => {
+    const err = form.querySelector<HTMLParagraphElement>('.error')!;
+    const btn = form.querySelector<HTMLButtonElement>('button')!;
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      err.hidden = true;
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const values = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      delete values.confirm;
+      btn.disabled = true; btn.textContent = 'Kasse wird geöffnet …';
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: form.dataset.slug, values }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.url) throw new Error(data.error ?? 'Kasse konnte nicht geöffnet werden.');
+        location.href = data.url;
+      } catch (x) {
+        err.textContent = (x as Error).message; err.hidden = false;
+        btn.disabled = false; btn.textContent = 'Weiter zur Kasse';
+      }
+    });
+  });
+</script>
+
+<style>
+  fieldset { border: 0; padding: var(--space-m); margin: 0 0 var(--space-m); background: var(--weiss); border-left: 3px dashed var(--fadenrot); border-radius: 0 var(--radius-soft) var(--radius-soft) 0; }
+  legend { font-family: var(--font-display); font-size: var(--step-1); color: var(--garnblau); float: left; width: 100%; margin-bottom: var(--space-s); }
+  .field { margin-bottom: var(--space-m); clear: both; }
+  .field label { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+  .opt { font-weight: 400; color: var(--grau); }
+  input:not([type=checkbox]), select, textarea { width: 100%; padding: 0.7rem 1rem; font: inherit; border: 2px solid #C9CEDA; border-radius: 10px; background: var(--weiss); }
+  input:focus, select:focus, textarea:focus { border-color: var(--garnblau); outline: none; }
+  small { color: var(--grau); font-size: var(--step--1); }
+  .confirm { display: flex; gap: 0.6rem; align-items: flex-start; font-size: var(--step--1); margin-bottom: var(--space-m); }
+  .confirm input { margin-top: 0.3rem; }
+  .error { color: #B3261E; font-weight: 600; margin-top: var(--space-s); }
+  button[disabled] { opacity: .6; cursor: wait; }
+</style>

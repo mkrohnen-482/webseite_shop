@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import StitchedName from '../components/StitchedName.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+const featured = (await getCollection('products', p => p.data.featured)).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Personalisierte Geschenke mit Namen">
+  <div class="wrap">
+    <StitchedName />
+
+    <section aria-labelledby="fav">
+      <h2 id="fav">Am häufigsten verschenkt</h2>
+      <div class="grid">
+        {featured.map(p => <ProductCard slug={p.id} {...p.data} />)}
+      </div>
+    </section>
+
+    <hr class="seam" />
+
+    <section id="so-gehts" aria-labelledby="how">
+      <h2 id="how">So geht's</h2>
+      <ol class="steps">
+        <li><h3>Produkt wählen</h3><p>Handtuch, Brotdose, Tasse – alles aus unserer Werkstatt.</p></li>
+        <li><h3>Namen eingeben</h3><p>Direkt im Formular auf der Produktseite. Wir prüfen jede Schreibweise vor der Fertigung.</p></li>
+        <li><h3>Wir fertigen &amp; versenden</h3><p>In der Regel innerhalb von 3–5 Werktagen bei dir.</p></li>
+      </ol>
+    </section>
+  </div>
+</Base>
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-l) var(--space-m); }
+  .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-m); counter-reset: s; }
+  .steps li { counter-increment: s; }
+  .steps li::before { content: counter(s); font-family: var(--font-display); font-size: var(--step-3); color: var(--fadenrot); }
+</style>

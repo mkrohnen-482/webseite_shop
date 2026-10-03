@@ -1,0 +1,20 @@
+---
+interface Props { slug: string; title: string; price: number; technique: string; image: string }
+const { slug, title, price, technique, image } = Astro.props;
+const eur = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price);
+---
+<a class="card" href={`/produkte/${slug}`}>
+  <img src={`${image}`} alt={title} loading="lazy" width="400" height="400" />
+  <span class="technique">{technique}</span>
+  <h3>{title}</h3>
+  <span class="price">{eur} <small>inkl. MwSt., zzgl. Versand</small></span>
+</a>
+<style>
+  .card { display: block; text-decoration: none; color: inherit; }
+  img { border-radius: var(--radius-soft); aspect-ratio: 1; object-fit: cover; background: var(--weiss); }
+  .technique { display: inline-block; margin-top: var(--space-s); font-size: var(--step--1); color: var(--grau); }
+  h3 { margin-top: 0.25rem; }
+  .card:hover h3 { text-decoration: underline; text-decoration-color: var(--fadenrot); text-decoration-style: dashed; }
+  .price { font-weight: 600; }
+  small { font-weight: 400; color: var(--grau); }
+</style>

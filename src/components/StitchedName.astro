@@ -1,0 +1,51 @@
+---
+// Hero-Element: Besucher tippt einen Namen, er erscheint "gestickt".
+// Das ist das EINE auffällige Element der Seite – alles andere bleibt ruhig.
+---
+<section class="stitch" aria-labelledby="stitch-title">
+  <h1 id="stitch-title">Geschenke, die den Namen kennen.</h1>
+  <p class="lead">Bestickt, graviert oder bedruckt – jedes Stück fertigen wir einzeln für genau einen Menschen.</p>
+
+  <div class="canvas" aria-hidden="true">
+    <svg viewBox="0 0 800 220" role="presentation">
+      <text id="stitch-text" x="400" y="150" text-anchor="middle">Lina</text>
+    </svg>
+  </div>
+
+  <label for="stitch-input">Probier's mit einem Namen aus</label>
+  <div class="row">
+    <input id="stitch-input" type="text" maxlength="12" placeholder="z. B. Luksen" autocomplete="off" />
+    <a class="btn" href={`/produkte`}>Produkte ansehen</a>
+  </div>
+</section>
+
+<script>
+  const input = document.getElementById('stitch-input') as HTMLInputElement | null;
+  const text = document.getElementById('stitch-text');
+  input?.addEventListener('input', () => {
+    if (!text) return;
+    const v = input.value.trim();
+    text.textContent = v.length ? v : 'Lina';
+    text.classList.remove('sew'); void (text as any).getBBox(); text.classList.add('sew');
+  });
+</script>
+
+<style>
+  .stitch { padding-block: var(--space-l) var(--space-xl); }
+  .lead { font-size: var(--step-1); color: var(--grau); }
+  .canvas { background: var(--garnblau); border-radius: var(--radius-soft); margin-block: var(--space-m); }
+  svg { width: 100%; height: auto; display: block; }
+  text {
+    font-family: var(--font-display); font-size: 120px;
+    fill: none; stroke: var(--fadenrot); stroke-width: 3;
+    stroke-dasharray: 9 6; stroke-linecap: round;
+  }
+  :global(.sew) { animation: sew 0.9s ease-out; }
+  @keyframes sew { from { stroke-dashoffset: 300; opacity: .3; } to { stroke-dashoffset: 0; opacity: 1; } }
+  label { display: block; font-weight: 600; margin-bottom: var(--space-s); }
+  .row { display: flex; gap: var(--space-s); flex-wrap: wrap; }
+  input {
+    flex: 1 1 240px; padding: 0.85rem 1.2rem; border-radius: var(--radius-pill);
+    border: 2px solid var(--garnblau); font: inherit; background: var(--weiss);
+  }
+</style>

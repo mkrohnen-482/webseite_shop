@@ -1,0 +1,50 @@
+---
+import '../styles/tokens.css';
+interface Props { title: string; description?: string }
+const { title, description = 'Personalisierte Geschenke mit Namen – bestickt, graviert, bedruckt. Von Hand gefertigt in Deutschland.' } = Astro.props;
+---
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} | Lina &amp; Luksen</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href={`/favicon.svg`} type="image/svg+xml" />
+  <!-- DSGVO: Für Livebetrieb Fonts lokal hosten (siehe docs/05-recht.md) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Young+Serif&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="logo" href={`/`}>Lina &amp; Luksen</a>
+    <nav aria-label="Hauptnavigation">
+      <a href={`/produkte`}>Produkte</a>
+      <a href={`/#so-gehts`}>So geht's</a>
+    </nav>
+  </header>
+  <main><slot /></main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Von Hand personalisiert. Versand aus Deutschland.</p>
+      <nav aria-label="Rechtliches">
+        <a href={`/impressum`}>Impressum</a>
+        <a href={`/datenschutz`}>Datenschutz</a>
+        <a href={`/agb`}>AGB</a>
+        <a href={`/widerruf`}>Widerruf</a>
+        <a href={`/versand`}>Versand &amp; Zahlung</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
+<style>
+  .site-header { display: flex; justify-content: space-between; align-items: center; padding-block: var(--space-m); }
+  .logo { font-family: var(--font-display); font-size: var(--step-1); color: var(--garnblau); text-decoration: none; }
+  nav { display: flex; gap: var(--space-m); flex-wrap: wrap; }
+  nav a { text-decoration: none; font-weight: 600; }
+  nav a:hover { text-decoration: underline; }
+  .site-footer { margin-top: var(--space-xl); padding-block: var(--space-l); background: var(--garnblau); color: var(--weiss); }
+  .site-footer a { color: var(--weiss); font-weight: 400; }
+</style>

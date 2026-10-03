@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+const all = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+const techniques = ['Stickerei', 'Lasergravur', 'Sublimation'] as const;
+---
+<Base title="Alle Produkte">
+  <div class="wrap">
+    <h1>Alle Produkte</h1>
+    {techniques.map(t => {
+      const items = all.filter(p => p.data.technique === t);
+      return items.length > 0 && (
+        <section>
+          <h2>{t}</h2>
+          <div class="grid">{items.map(p => <ProductCard slug={p.id} {...p.data} />)}</div>
+        </section>
+      );
+    })}
+  </div>
+</Base>
+<style>
+  section { margin-top: var(--space-l); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-l) var(--space-m); }
+</style>

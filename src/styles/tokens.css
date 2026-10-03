@@ -1,0 +1,67 @@
+/* ===== Lina & Luksen – Design Tokens =====
+   Idee: "Der Faden ist die Marke." Eine Akzentfarbe (Fadenrot) taucht
+   nur dort auf, wo genäht/personalisiert wird – nie als Deko.        */
+:root {
+  /* Farbe */
+  --garnblau: #2A3770;   /* Primärfarbe, Headlines, Buttons */
+  --leinen:   #F3F5F8;   /* Hintergrund (kühl, kein Creme) */
+  --weiss:    #FFFFFF;
+  --salbei:   #A9C4B0;   /* ruhige Zweitfläche */
+  --fadenrot: #E2474B;   /* NUR für Stiche/Personalisierung */
+  --graphit:  #23262E;   /* Fließtext */
+  --grau:     #5C6270;
+
+  /* Typo */
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.333rem;
+  --step-2: 1.777rem;
+  --step-3: 2.369rem;
+  --step-4: clamp(2.6rem, 6vw, 4.2rem);
+
+  /* Raum & Form */
+  --space-s: 0.75rem;
+  --space-m: 1.5rem;
+  --space-l: 3rem;
+  --space-xl: 6rem;
+  --radius-soft: 14px;   /* Produktbilder */
+  --radius-pill: 999px;  /* Buttons, Inputs */
+  --measure: 66ch;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--leinen);
+  color: var(--graphit);
+  font: 400 var(--step-0)/1.6 var(--font-body);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; color: var(--garnblau); line-height: 1.15; margin: 0 0 var(--space-s); }
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); }
+p { max-width: var(--measure); margin: 0 0 var(--space-m); }
+a { color: var(--garnblau); text-underline-offset: 3px; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--fadenrot); outline-offset: 3px; }
+
+.wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
+
+.btn {
+  display: inline-block; border: 0; cursor: pointer;
+  padding: 0.85rem 1.6rem; border-radius: var(--radius-pill);
+  background: var(--garnblau); color: var(--weiss);
+  font: 600 var(--step-0) var(--font-body); text-decoration: none;
+}
+.btn:hover { background: #1F2A58; }
+.btn--ghost { background: transparent; color: var(--garnblau); box-shadow: inset 0 0 0 2px var(--garnblau); }
+.btn--ghost:hover { background: var(--weiss); }
+
+/* Naht-Linie: das einzige wiederkehrende Strukturelement */
+.seam { border: 0; height: 2px; margin: var(--space-l) 0;
+  background: repeating-linear-gradient(90deg, var(--fadenrot) 0 10px, transparent 10px 16px); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
